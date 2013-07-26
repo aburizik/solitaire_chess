@@ -218,7 +218,15 @@ puts get_next_piece([[nil,nil,"N",nil],
 # Next, write a function that will check whether I am done,
 # i.e., whether there is just one piece on the board.
 
-
+def get_pieces(board)
+	pieces = []
+	next_piece = get_next_piece(board, 0, -1)
+	while next_piece
+		pieces.push(current_piece)
+		next_piece = get_next_piece(board, next_piece[0], next_piece[1])
+	end
+end
+	
 
 # Next, write the main function, which takes a board and:
 # 1. checks whether we have reached the victory condition.
@@ -228,3 +236,24 @@ puts get_next_piece([[nil,nil,"N",nil],
 # N.B.// I will need to find a way for it to output these intermediate boards.
 # 'Twill not do to print because I will need to discard paths if they stop working.
 # Would be best to store the path somewhere and delete if no legal moves are found.
+
+def play(board, path)
+	solutions = []
+	pieces = get_pieces(board)
+	if pieces.length = 1
+		solutions.push(path)
+	else
+		pieces.each{|piece| legal_moves(board, piece[0], piece[1]).each{|lmove| play(lmove, path.push(lmove))}}
+	end
+end
+
+
+
+
+
+
+
+
+
+
+
