@@ -266,41 +266,44 @@ def all_legal_moves(board)
 	return result
 end
 
-puts "all_legal_moves tests"
-
-puts all_legal_moves([[nil,nil,"N",nil], 
-		   [nil,nil,nil,nil], 
-		   [nil,"P",nil,nil],
-  		   [nil,nil,nil,nil]]) == [[[nil,nil,nil,nil], 
-									[nil,nil,nil,nil], 
-									[nil,"N",nil,nil],
-  									[nil,nil,nil,nil]]]
-
-puts all_legal_moves([[nil,nil,nil,nil], 
-		   [nil,nil,nil,nil], 
-		   [nil,"P",nil,nil],
-  		   [nil,nil,nil,nil]]) == []
-
-puts all_legal_moves([[nil,nil,nil,nil], 
-		   [nil,nil,nil,"Q"], 
-		   [nil,"P",nil,nil],
-  		   [nil,nil,nil,nil]]) == []
+# puts "all_legal_moves tests"
+# 
+# puts all_legal_moves([[nil,nil,"N",nil],
+# 		   			  [nil,nil,nil,nil],
+# 					  [nil,"P",nil,nil],
+#   		  			  [nil,nil,nil,nil]]) == [[[nil,nil,nil,nil],
+# 											   [nil,nil,nil,nil],
+# 											   [nil,"N",nil,nil],
+#   											   [nil,nil,nil,nil]]]
+# 
+# puts all_legal_moves([[nil,nil,nil,nil], 
+# 		   			  [nil,nil,nil,nil], 
+# 		   			  [nil,"P",nil,nil],
+# 		   			  [nil,nil,nil,nil]]) == []
+# 
+# puts all_legal_moves([[nil,nil,nil,nil], 
+# 		   			  [nil,nil,nil,"Q"], 
+# 		   			  [nil,"P",nil,nil],
+# 		   			  [nil,nil,nil,nil]]) == []
 
 
 def play(board, path)
-	solutions = []
 	pieces = get_pieces(board)
+	start = []
+	pieces.each{|piece| start.concat(get_legal_moves(board, piece[0], piece[1]))}
+	lmoves = start
+
 	if pieces.length == 1
-		solutions.push(path)
+		play(board, path).push(path)
+	elsif lmoves == []
+		return []
 	else
-		lmoves = []
-		pieces.each{|piece| lmoves.concat(get_legal_moves(board, piece[0], piece[1]))}
 		lmoves.each{|lmove| mpath = deep_copy(path)
 							mpath.push(lmove)
 							play(lmove, mpath)}
 	end
-	return solutions
 end
+
 
 
 puts "play tests"
@@ -310,6 +313,19 @@ puts play([[nil,nil,"N",nil],
 		   [nil,nil,nil,nil], 
 		   [nil,"P",nil,nil],
   		   [nil,nil,nil,nil]], []) == [[[[nil,nil,nil,nil], 
+									 	 [nil,nil,nil,nil], 
+										 [nil,"N",nil,nil],
+  										 [nil,nil,nil,nil]]]]
+
+puts "two possible winning moves"
+puts play([[nil,nil,nil,nil], 
+		   [nil,nil,"B",nil], 
+		   [nil,"P",nil,nil],
+  		   [nil,nil,nil,nil]], []) == [[[[nil,nil,nil,nil], 
+									 	 [nil,nil,nil,nil], 
+										 [nil,"N",nil,nil],
+  										 [nil,nil,nil,nil]]],
+  									   [[[nil,nil,nil,nil], 
 									 	 [nil,nil,nil,nil], 
 										 [nil,"N",nil,nil],
   										 [nil,nil,nil,nil]]]]
