@@ -59,11 +59,9 @@ def legal?(move, board)
 	end
 end
 
-def apply(row, column, board, move)
-	mboard = Marshal.load(Marshal.dump(board))
-	mboard[move[0]][move[1]] = mboard[row][column]
-	mboard[row][column] = nil
-	return mboard
+def deep_copy(arry)
+	copy = Marshal.load(Marshal.dump(arry))
+	return copy
 end
 
 def legal_moves(board, row, column)
@@ -100,7 +98,10 @@ def legal_moves(board, row, column)
 									check = legal?(move, board)
 								end
 								if check == true
-									moves.push(apply(row, column, board, move))
+									mboard = deep_copy(board)
+									mboard[move[0]][move[1]] = mboard[row][column]
+									mboard[row][column] = nil
+									moves.push(mboard)
 								end}
 	return moves
 end
@@ -222,11 +223,26 @@ def get_pieces(board)
 	pieces = []
 	next_piece = get_next_piece(board, 0, -1)
 	while next_piece
-		pieces.push(current_piece)
+		pieces.push(next_piece)
 		next_piece = get_next_piece(board, next_piece[0], next_piece[1])
 	end
+	return pieces
 end
-	
+
+puts get_pieces([[nil,nil,"N",nil], 
+				 [nil,nil,nil,nil], 
+				 [nil,"P",nil,nil],
+  				 ["B","Q",nil,"R"]]) == [[0,2],[2,1],[3,0],[3,1],[3,3]]
+  				 
+puts get_pieces([[nil,nil,nil,nil], 
+				 [nil,nil,nil,nil], 
+				 [nil,"P",nil,nil],
+  				 [nil,nil,nil,nil]]) == [[2,1]]
+
+puts get_pieces([[nil,nil,nil,nil], 
+				 [nil,nil,nil,nil], 
+				 [nil,nil,nil,nil],
+  				 [nil,nil,nil,nil]]) == []
 
 # Next, write the main function, which takes a board and:
 # 1. checks whether we have reached the victory condition.
@@ -240,20 +256,30 @@ end
 def play(board, path)
 	solutions = []
 	pieces = get_pieces(board)
-	if pieces.length = 1
+	if pieces.length == 1
 		solutions.push(path)
 	else
-		pieces.each{|piece| legal_moves(board, piece[0], piece[1]).each{|lmove| play(lmove, path.push(lmove))}}
+		pieces.each{|piece|
+					legal_moves(board, piece[0], piece[1]).each{|lmove| 
+																play(lmove, deep_copy(path).push(lmove))}}
 	end
+	return solutions
 end
 
+puts play([[nil,nil,"N",nil], 
+		   [nil,nil,nil,nil], 
+		   [nil,"P",nil,nil],
+  		   [nil,nil,nil,nil]], []) == [[[[nil,nil,nil,nil], 
+									 	 [nil,nil,nil,nil], 
+										 [nil,"N",nil,nil],
+  										 [nil,nil,nil,nil]]]]
 
+puts play([[nil,nil,nil,nil], 
+		   [nil,nil,nil,nil], 
+		   [nil,"P",nil,nil],
+  		   [nil,nil,nil,nil]], []) == [[[]]]
 
-
-
-
-
-
-
-
-
+puts play([[nil,nil,"N",nil], 
+		   ["B","P",nil,nil], 
+		   ["N","B","R",nil],
+  		   [nil,nil,"R","P"]], []).length == 1
