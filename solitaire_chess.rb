@@ -152,10 +152,73 @@ puts legal_moves([[nil,nil,"N",nil],
 
 
 # Next, write a function that finds the first or next piece after a given piece.
-# i.e., it traverses until it finds a square that is not equal to "."
+# i.e., it traverses until it finds a square that is not nil
+# if I had a board class I might be able to keep a record of the pieces I have
+# so I wouldn't have to traverse :-(
+
+def get_next_square(l, row, column)
+	if column < l-1
+		return [row, column+1]
+	elsif row < l-1
+		return [row+1, 0]
+	else
+		return false
+	end
+end
+
+
+def get_next_piece(board, row, column)
+	l = board.length
+	next_square = get_next_square(l, row, column)
+
+	while next_square
+		row = next_square[0]
+		column = next_square[1]
+		if board[row][column] != nil
+			break
+		else
+			next_square = get_next_square(l, row, column)
+		end
+	end
+	
+	return next_square
+end
+
+# this is much less elegant than the nested loop I initially had.
+# The reason I have to do this is I need it to find the next piece
+# AFTER the one I pass in, so I had to outsource the stepping to
+# its own function to make that first step.		
+
+puts get_next_piece([["A",nil,"N",nil], 
+				  	 [nil,nil,nil,nil], 
+				  	 [nil,"P",nil,nil],
+  				  	 ["B","Q",nil,"R"]], 0, -1) == [0,0]
+  								 
+puts get_next_piece([["A",nil,"N",nil], 
+					 [nil,nil,nil,nil], 
+				  	 [nil,"P",nil,nil],
+				  	 ["B","Q",nil,"R"]], 0, 0) == [0,2]
+				  
+puts get_next_piece([[nil,nil,"N",nil], 
+				  	 [nil,nil,nil,nil], 
+				  	 [nil,"P",nil,nil],
+				  	 ["B","Q",nil,"R"]], 2, 1) == [3,0]
+
+puts get_next_piece([[nil,nil,"N",nil], 
+					 [nil,nil,nil,nil], 
+					 [nil,"P",nil,nil],
+  				  	 ["B","Q",nil,"R"]], 3, 0) == [3,1]
+  								 
+puts get_next_piece([[nil,nil,"N",nil], 
+				  	 [nil,nil,nil,nil], 
+				  	 [nil,"P",nil,nil],
+  				  	 ["B","Q",nil,"R"]], 3, 3) == false
+  				  	 
 
 # Next, write a function that will check whether I am done,
 # i.e., whether there is just one piece on the board.
+
+
 
 # Next, write the main function, which takes a board and:
 # 1. checks whether we have reached the victory condition.
