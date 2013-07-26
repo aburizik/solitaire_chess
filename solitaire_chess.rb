@@ -64,7 +64,7 @@ def deep_copy(arry)
 	return copy
 end
 
-def legal_moves(board, row, column)
+def get_legal_moves(board, row, column)
 
 	piece = board[row][column]
 	case piece
@@ -106,7 +106,9 @@ def legal_moves(board, row, column)
 	return moves
 end
 
-puts legal_moves([[nil,nil,"N",nil], 
+puts "get_legal_moves tests"
+
+puts get_legal_moves([[nil,nil,"N",nil], 
 				  [nil,nil,nil,nil], 
 				  [nil,"P",nil,nil],
   				  ["B","Q",nil,"R"]], 0, 2) == [[[nil,nil,nil,nil], 
@@ -114,12 +116,12 @@ puts legal_moves([[nil,nil,"N",nil],
 												[nil,"N",nil,nil],
   												["B","Q",nil,"R"]]]
   								 
-puts legal_moves([[nil,nil,"N",nil], 
+puts get_legal_moves([[nil,nil,"N",nil], 
 				  [nil,nil,nil,nil], 
 				  [nil,"P",nil,nil],
 				  ["B","Q",nil,"R"]], 2, 1) == []
 
-puts legal_moves([[nil,nil,"N",nil], 
+puts get_legal_moves([[nil,nil,"N",nil], 
 				  [nil,nil,nil,nil], 
 				  [nil,"P",nil,nil],
   				  ["B","Q",nil,"R"]], 3, 0) == [[[nil,nil,"N",nil], 
@@ -127,7 +129,7 @@ puts legal_moves([[nil,nil,"N",nil],
 												[nil,"B",nil,nil],
   												[nil,"Q",nil,"R"]]]
   								 
-puts legal_moves([[nil,nil,"N",nil], 
+puts get_legal_moves([[nil,nil,"N",nil], 
 				  [nil,nil,nil,nil], 
 				  [nil,"P",nil,nil],
   				  ["B","Q",nil,"R"]], 3, 1) == [[[nil,nil,"N",nil], 
@@ -143,7 +145,7 @@ puts legal_moves([[nil,nil,"N",nil],
 												 [nil,"P",nil,nil],
   												 ["Q",nil,nil,"R"]]]
 
-puts legal_moves([[nil,nil,"N",nil], 
+puts get_legal_moves([[nil,nil,"N",nil], 
 				  [nil,nil,nil,nil], 
 				  [nil,"P",nil,nil],
   				  ["B","Q",nil,"R"]], 3, 3) == [[[nil,nil,"N",nil], 
@@ -190,6 +192,8 @@ end
 # AFTER the one I pass in, so I had to outsource the stepping to
 # its own function to make that first step.		
 
+puts "get_next_piece tests"
+
 puts get_next_piece([["A",nil,"N",nil], 
 				  	 [nil,nil,nil,nil], 
 				  	 [nil,"P",nil,nil],
@@ -229,6 +233,8 @@ def get_pieces(board)
 	return pieces
 end
 
+puts "get_pieces tests"
+
 puts get_pieces([[nil,nil,"N",nil], 
 				 [nil,nil,nil,nil], 
 				 [nil,"P",nil,nil],
@@ -253,19 +259,53 @@ puts get_pieces([[nil,nil,nil,nil],
 # 'Twill not do to print because I will need to discard paths if they stop working.
 # Would be best to store the path somewhere and delete if no legal moves are found.
 
+def all_legal_moves(board)
+	result = []
+	pieces = get_pieces(board)
+	pieces.each{|piece| result.concat(get_legal_moves(board, piece[0], piece[1]))}
+	return result
+end
+
+puts "all_legal_moves tests"
+
+puts all_legal_moves([[nil,nil,"N",nil], 
+		   [nil,nil,nil,nil], 
+		   [nil,"P",nil,nil],
+  		   [nil,nil,nil,nil]]) == [[[nil,nil,nil,nil], 
+									[nil,nil,nil,nil], 
+									[nil,"N",nil,nil],
+  									[nil,nil,nil,nil]]]
+
+puts all_legal_moves([[nil,nil,nil,nil], 
+		   [nil,nil,nil,nil], 
+		   [nil,"P",nil,nil],
+  		   [nil,nil,nil,nil]]) == []
+
+puts all_legal_moves([[nil,nil,nil,nil], 
+		   [nil,nil,nil,"Q"], 
+		   [nil,"P",nil,nil],
+  		   [nil,nil,nil,nil]]) == []
+
+
 def play(board, path)
 	solutions = []
 	pieces = get_pieces(board)
 	if pieces.length == 1
 		solutions.push(path)
 	else
-		pieces.each{|piece|
-					legal_moves(board, piece[0], piece[1]).each{|lmove| 
-																play(lmove, deep_copy(path).push(lmove))}}
+		lmoves = []
+		pieces.each{|piece| lmoves.concat(get_legal_moves(board, piece[0], piece[1]))}
+		lmoves.each{|lmove| mpath = deep_copy(path)
+							mpath.push(lmove)
+							play(lmove, mpath)}
 	end
 	return solutions
 end
 
+
+puts "play tests"
+
+puts "one move away"
 puts play([[nil,nil,"N",nil], 
 		   [nil,nil,nil,nil], 
 		   [nil,"P",nil,nil],
@@ -274,11 +314,19 @@ puts play([[nil,nil,"N",nil],
 										 [nil,"N",nil,nil],
   										 [nil,nil,nil,nil]]]]
 
+puts "winning board"
 puts play([[nil,nil,nil,nil], 
 		   [nil,nil,nil,nil], 
 		   [nil,"P",nil,nil],
-  		   [nil,nil,nil,nil]], []) == [[[]]]
+  		   [nil,nil,nil,nil]], []) == [[]]
 
+puts "no legal moves"
+puts play([[nil,nil,nil,nil],
+		   [nil,nil,nil,"Q"],
+		   [nil,"P",nil,nil],
+  		   [nil,nil,nil,nil]], []) == []
+
+puts "unique solution"
 puts play([[nil,nil,"N",nil], 
 		   ["B","P",nil,nil], 
 		   ["N","B","R",nil],
