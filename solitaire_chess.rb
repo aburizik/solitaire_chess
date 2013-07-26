@@ -1,16 +1,9 @@
-#Main function will take an array of arrays, e.g.
-
-# [ [nil,nil,"N",nil] 
-#   [nil,nil,nil,nil] 
-#   [nil,"P",nil,nil]
-#   ["B","Q",nil,"R"] ]
-#   
-# and return all the intermediate arrays in all solutions.
-# To do so, it will have to traverse the array
-# and generate all possible solutions starting with each piece.
-# To generate all possible solutions given a start piece,
-# it will have to make a list of all possible moves, determine which ones are legal,
-# and repeat for each piece in the resulting boards.
+# Solitaire chess
+# Start with a board with at least one chess piece.
+# A piece can only move to take another piece.
+# The victory condition is when there is only one piece left.
+# The goal is to return all possible solutions,
+# where a solution is an array of successive board states.
 
 def move_one(row, column, direction)	
 	case direction
@@ -154,8 +147,6 @@ puts get_legal_moves([[nil,nil,"N",nil],
   												["B","R",nil,nil]]]
 
 
-# Next, write a function that finds the first or next piece after a given piece.
-# i.e., it traverses until it finds a square that is not nil
 # if I had a board class I might be able to keep a record of the pieces I have
 # so I wouldn't have to traverse :-(
 
@@ -190,7 +181,7 @@ end
 # this is much less elegant than the nested loop I initially had.
 # The reason I have to do this is I need it to find the next piece
 # AFTER the one I pass in, so I had to outsource the stepping to
-# its own function to make that first step.		
+# its own function to make that first step.	ugh.
 
 puts "get_next_piece tests"
 
@@ -213,15 +204,12 @@ puts get_next_piece([[nil,nil,"N",nil],
 					 [nil,nil,nil,nil], 
 					 [nil,"P",nil,nil],
   				  	 ["B","Q",nil,"R"]], 3, 0) == [3,1]
-  								 
+
 puts get_next_piece([[nil,nil,"N",nil], 
 				  	 [nil,nil,nil,nil], 
 				  	 [nil,"P",nil,nil],
   				  	 ["B","Q",nil,"R"]], 3, 3) == false
-  				  	 
 
-# Next, write a function that will check whether I am done,
-# i.e., whether there is just one piece on the board.
 
 def get_pieces(board)
 	pieces = []
@@ -250,14 +238,6 @@ puts get_pieces([[nil,nil,nil,nil],
 				 [nil,nil,nil,nil],
   				 [nil,nil,nil,nil]]) == []
 
-# Next, write the main function, which takes a board and:
-# 1. checks whether we have reached the victory condition.
-# 2. finds the first/next piece and gets all the places we could go from there.
-# 3. recurses on each of these boards.
-
-# N.B.// I will need to find a way for it to output these intermediate boards.
-# 'Twill not do to print because I will need to discard paths if they stop working.
-# Would be best to store the path somewhere and delete if no legal moves are found.
 
 def all_legal_moves(board)
 	result = []
