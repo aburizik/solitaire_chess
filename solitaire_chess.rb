@@ -78,8 +78,11 @@ def legal?(move, board)
 end
 
 def deep_copy(arry)
-	copy = Marshal.load(Marshal.dump(arry))
-	return copy
+	if arry.is_a? Array
+		arry.map{|x| deep_copy(x)}
+	else
+		return arry
+	end
 end
 
 def get_legal_moves(board, row, column)
