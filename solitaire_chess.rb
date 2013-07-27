@@ -5,41 +5,66 @@
 # The goal is to return all possible solutions,
 # where a solution is an array of successive board states.
 
+# Solution to the challenge puzzle:
+
+# "Step 1"
+# [nil, nil, "N", nil]
+# ["B", "P", nil, nil]
+# [nil, "B", "R", nil]
+# [nil, nil, "N", "P"]
+# "Step 2"
+# [nil, nil, "N", nil]
+# ["B", "P", nil, nil]
+# [nil, nil, "R", nil]
+# [nil, nil, "B", "P"]
+# "Step 3"
+# [nil, nil, "N", nil]
+# ["B", "P", nil, nil]
+# [nil, nil, "R", nil]
+# [nil, nil, nil, "P"]
+# "Step 4"
+# [nil, nil, nil, nil]
+# ["N", "P", nil, nil]
+# [nil, nil, "R", nil]
+# [nil, nil, nil, "P"]
+# "Step 5"
+# [nil, nil, nil, nil]
+# [nil, "P", nil, nil]
+# [nil, nil, "N", nil]
+# [nil, nil, nil, "P"]
+# "Step 6"
+# [nil, nil, nil, nil]
+# [nil, nil, nil, nil]
+# [nil, nil, "P", nil]
+# [nil, nil, nil, "P"]
+# "Step 7"
+# [nil, nil, nil, nil]
+# [nil, nil, nil, nil]
+# [nil, nil, nil, nil]
+# [nil, nil, nil, "P"]
+# "Victory!"
+
+
+
 def move_one(row, column, direction)	
 	case direction
-		when "north"
-			return [row-1, column]
-		when "south"
-			return [row+1, column]
-		when "east"
-			return [row, column+1]
-		when "west"
-			return [row, column-1]
-		when "northeast"
-			return [row-1, column+1]
-		when "northwest"
-			return [row-1, column-1]
-		when "southeast"
-			return [row+1, column+1]
-		when "southwest"
-			return [row+1, column-1]
+		when "north" then return [row-1, column]
+		when "south" then return [row+1, column]
+		when "east" then return [row, column+1]
+		when "west" then return [row, column-1]
+		when "northeast" then return [row-1, column+1]
+		when "northwest" then return [row-1, column-1]
+		when "southeast" then return [row+1, column+1]
+		when "southwest" then return [row+1, column-1]
 			
-		when "k1"
-			return [row+1, column+2]
-		when "k2"
-			return [row+2, column+1]
-		when "k3"
-			return [row+1, column-2]
-		when "k4"
-			return [row+2, column-1]
-		when "k5"
-			return [row-1, column+2]
-		when "k6"
-			return [row-2, column+1]
-		when "k7"
-			return [row-1, column-2]
-		when "k8"
-			return [row-2, column-1]		
+		when "k1" then return [row+1, column+2]
+		when "k2" then return [row+2, column+1]
+		when "k3" then return [row+1, column-2]
+		when "k4" then return [row+2, column-1]
+		when "k5" then return [row-1, column+2]
+		when "k6" then return [row-2, column+1]
+		when "k7" then return [row-1, column-2]
+		when "k8" then return [row-2, column-1]
 	end		
 end
 
@@ -243,34 +268,6 @@ puts get_pieces([[nil,nil,nil,nil],
   				 [nil,nil,nil,nil]]) == []
 
 
-def all_legal_moves(board)
-	result = []
-	pieces = get_pieces(board)
-	pieces.each{|piece| result.concat(get_legal_moves(board, piece[0], piece[1]))}
-	return result
-end
-
-# puts "all_legal_moves tests"
-# 
-# puts all_legal_moves([[nil,nil,"N",nil],
-# 		   			  [nil,nil,nil,nil],
-# 					  [nil,"P",nil,nil],
-#   		  			  [nil,nil,nil,nil]]) == [[[nil,nil,nil,nil],
-# 											   [nil,nil,nil,nil],
-# 											   [nil,"N",nil,nil],
-#   											   [nil,nil,nil,nil]]]
-# 
-# puts all_legal_moves([[nil,nil,nil,nil], 
-# 		   			  [nil,nil,nil,nil], 
-# 		   			  [nil,"P",nil,nil],
-# 		   			  [nil,nil,nil,nil]]) == []
-# 
-# puts all_legal_moves([[nil,nil,nil,nil], 
-# 		   			  [nil,nil,nil,"Q"], 
-# 		   			  [nil,"P",nil,nil],
-# 		   			  [nil,nil,nil,nil]]) == []
-
-
 def play(board, path)
 	pieces = get_pieces(board)
 	lmoves = []
@@ -330,3 +327,54 @@ puts play([[nil,nil,"N",nil],
 		   ["B","P",nil,nil], 
 		   ["N","B","R",nil],
   		   [nil,nil,"R","P"]], []).length == 1
+
+def solve(board)
+	solutions = play(board, [])
+
+	case solutions
+	when [] then puts "There are no possible solutions."
+	when [[]] then puts "You have a winning board!"
+	else
+		count = 1
+		countb = 1
+
+		solutions.each{|solution| p "Solution No. #{count}"
+						solution.each{|step| p "Step #{countb}"
+									   step.each{|row| p row}
+									   countb += 1}
+						p "Victory!"
+						count += 1}
+	end
+end
+
+puts "solve tests"
+
+puts "one move away"
+puts solve([[nil,nil,"N",nil],
+		   [nil,nil,nil,nil],
+		   [nil,"P",nil,nil],
+  		   [nil,nil,nil,nil]])
+
+puts "two possible winning moves"
+puts solve([[nil,nil,nil,nil],
+		   [nil,nil,"B",nil],
+		   [nil,"B",nil,nil],
+  		   [nil,nil,nil,nil]])
+
+puts "winning board"
+puts solve([[nil,nil,nil,nil],
+		   [nil,nil,nil,nil],
+		   [nil,"P",nil,nil],
+  		   [nil,nil,nil,nil]])
+
+puts "no solutions"
+puts solve([[nil,nil,nil,nil],
+		   [nil,nil,nil,"Q"],
+		   [nil,"P",nil,nil],
+  		   [nil,nil,nil,nil]])
+
+puts "challenge puzzle"
+puts solve([[nil,nil,"N",nil],
+		   ["B","P",nil,nil],
+		   ["N","B","R",nil],
+  		   [nil,nil,"R","P"]])
