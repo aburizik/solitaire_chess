@@ -331,14 +331,13 @@ puts play( [[nil,nil,"N",nil],
 			["N","B","R",nil],
 			[nil,nil,"R","P"]], []).length == 1
 
+
 def solve(board)
 	solutions = play(board, [])
 
 	case solutions
-	when []
-		puts "There are no possible solutions."
-	when [[]]
-		puts "You have a winning board!"
+	when [] then puts "There are no possible solutions."
+	when [[]] then puts "You have a winning board!"
 	else
 		count = 1
 
