@@ -7,42 +7,42 @@
 
 # Solution to the challenge puzzle:
 
-# "Step 1"
+# Step 1
 # [nil, nil, "N", nil]
 # ["B", "P", nil, nil]
 # [nil, "B", "R", nil]
 # [nil, nil, "N", "P"]
-# "Step 2"
+# Step 2
 # [nil, nil, "N", nil]
 # ["B", "P", nil, nil]
 # [nil, nil, "R", nil]
 # [nil, nil, "B", "P"]
-# "Step 3"
+# Step 3
 # [nil, nil, "N", nil]
 # ["B", "P", nil, nil]
 # [nil, nil, "R", nil]
 # [nil, nil, nil, "P"]
-# "Step 4"
+# Step 4
 # [nil, nil, nil, nil]
 # ["N", "P", nil, nil]
 # [nil, nil, "R", nil]
 # [nil, nil, nil, "P"]
-# "Step 5"
+# Step 5
 # [nil, nil, nil, nil]
 # [nil, "P", nil, nil]
 # [nil, nil, "N", nil]
 # [nil, nil, nil, "P"]
-# "Step 6"
+# Step 6
 # [nil, nil, nil, nil]
 # [nil, nil, nil, nil]
 # [nil, nil, "P", nil]
 # [nil, nil, nil, "P"]
-# "Step 7"
+# Step 7
 # [nil, nil, nil, nil]
 # [nil, nil, nil, nil]
 # [nil, nil, nil, nil]
 # [nil, nil, nil, "P"]
-# "Victory!"
+# Victory!
 
 
 
@@ -311,70 +311,74 @@ puts play([[nil,nil,nil,nil],
   										 [nil,nil,nil,nil]]]]
 
 puts "winning board"
-puts play([[nil,nil,nil,nil], 
-		   [nil,nil,nil,nil], 
-		   [nil,"P",nil,nil],
-  		   [nil,nil,nil,nil]], []) == [[]]
+puts play( [[nil,nil,nil,nil], 
+			[nil,nil,nil,nil], 
+			[nil,"P",nil,nil],
+			[nil,nil,nil,nil]], []) == [[]]
 
 puts "no legal moves"
-puts play([[nil,nil,nil,nil],
-		   [nil,nil,nil,"Q"],
-		   [nil,"P",nil,nil],
-  		   [nil,nil,nil,nil]], []) == []
+puts play( [[nil,nil,nil,nil],
+			[nil,nil,nil,"Q"],
+			[nil,"P",nil,nil],
+			[nil,nil,nil,nil]], []) == []
 
 puts "unique solution"
-puts play([[nil,nil,"N",nil], 
-		   ["B","P",nil,nil], 
-		   ["N","B","R",nil],
-  		   [nil,nil,"R","P"]], []).length == 1
+puts play( [[nil,nil,"N",nil], 
+			["B","P",nil,nil], 
+			["N","B","R",nil],
+			[nil,nil,"R","P"]], []).length == 1
 
 def solve(board)
 	solutions = play(board, [])
 
 	case solutions
-	when [] then puts "There are no possible solutions."
-	when [[]] then puts "You have a winning board!"
+	when []
+		puts "There are no possible solutions."
+	when [[]]
+		puts "You have a winning board!"
 	else
 		count = 1
-		countb = 1
 
-		solutions.each{|solution| p "Solution No. #{count}"
-						solution.each{|step| p "Step #{countb}"
+		solutions.each{|solution| puts "Solution No. #{count}"
+						countb = 1
+						solution.each{|step| puts "Step #{countb}"
 									   step.each{|row| p row}
 									   countb += 1}
-						p "Victory!"
+						puts "Victory!"
 						count += 1}
 	end
 end
 
+
+
 puts "solve tests"
 
 puts "one move away"
-puts solve([[nil,nil,"N",nil],
-		   [nil,nil,nil,nil],
-		   [nil,"P",nil,nil],
-  		   [nil,nil,nil,nil]])
+solve( [[nil,nil,"N",nil],
+		[nil,nil,nil,nil],
+		[nil,"P",nil,nil],
+		[nil,nil,nil,nil]])
 
 puts "two possible winning moves"
-puts solve([[nil,nil,nil,nil],
-		   [nil,nil,"B",nil],
-		   [nil,"B",nil,nil],
-  		   [nil,nil,nil,nil]])
+solve( [[nil,nil,nil,nil],
+		[nil,nil,"B",nil],
+		[nil,"B",nil,nil],
+		[nil,nil,nil,nil]])
 
 puts "winning board"
-puts solve([[nil,nil,nil,nil],
-		   [nil,nil,nil,nil],
-		   [nil,"P",nil,nil],
-  		   [nil,nil,nil,nil]])
+solve( [[nil,nil,nil,nil],
+		[nil,nil,nil,nil],
+		[nil,"P",nil,nil],
+		[nil,nil,nil,nil]])
 
 puts "no solutions"
-puts solve([[nil,nil,nil,nil],
-		   [nil,nil,nil,"Q"],
-		   [nil,"P",nil,nil],
-  		   [nil,nil,nil,nil]])
+solve( [[nil,nil,nil,nil],
+		[nil,nil,nil,"Q"],
+		[nil,"P",nil,nil],
+		[nil,nil,nil,nil]])
 
 puts "challenge puzzle"
-puts solve([[nil,nil,"N",nil],
-		   ["B","P",nil,nil],
-		   ["N","B","R",nil],
-  		   [nil,nil,"R","P"]])
+solve( [[nil,nil,"N",nil],
+		["B","P",nil,nil],
+		["N","B","R",nil],
+  		[nil,nil,"R","P"]])
