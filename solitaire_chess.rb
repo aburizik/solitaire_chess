@@ -273,19 +273,18 @@ end
 
 def play(board, path)
 	pieces = get_pieces(board)
-	start = []
-	pieces.each{|piece| start.concat(get_legal_moves(board, piece[0], piece[1]))}
-	lmoves = start
+	lmoves = []
+	pieces.each{|piece| lmoves.concat(get_legal_moves(board, piece[0], piece[1]))}
+	solutions = []
 
 	if pieces.length == 1
-		play(board, path).push(path)#oh, never mind.
-	elsif lmoves == []
-		return []
+		solutions.push(path)
 	else
 		lmoves.each{|lmove| mpath = deep_copy(path)
 							mpath.push(lmove)
-							play(lmove, mpath)}
+							solutions = solutions + play(lmove, mpath)}
 	end
+	return solutions
 end
 
 
