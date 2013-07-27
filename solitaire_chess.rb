@@ -62,7 +62,7 @@ def get_legal_moves(board, row, column)
 	piece = board[row][column]
 	case piece
 	when "P"
-		directions = ["northeast", "northwest"]
+		directions = ["southeast", "southwest"]
 		unbounded = false
 	when "K"
 		directions = ["north", "south", "east", "west",
@@ -112,7 +112,11 @@ puts get_legal_moves([[nil,nil,"N",nil],
 puts get_legal_moves([[nil,nil,"N",nil], 
 				  [nil,nil,nil,nil], 
 				  [nil,"P",nil,nil],
-				  ["B","Q",nil,"R"]], 2, 1) == []
+				  ["B","Q",nil,"R"]], 2, 1) ==  [[[nil,nil,"N",nil], 
+												[nil,nil,nil,nil], 
+												[nil,nil,nil,nil],
+  												["P","Q",nil,"R"]]]
+
 
 puts get_legal_moves([[nil,nil,"N",nil], 
 				  [nil,nil,nil,nil], 
@@ -300,14 +304,14 @@ puts play([[nil,nil,"N",nil],
 puts "two possible winning moves"
 puts play([[nil,nil,nil,nil], 
 		   [nil,nil,"B",nil], 
-		   [nil,"P",nil,nil],
+		   [nil,"B",nil,nil],
   		   [nil,nil,nil,nil]], []) == [[[[nil,nil,nil,nil], 
 									 	 [nil,nil,nil,nil], 
-										 [nil,"N",nil,nil],
+										 [nil,"B",nil,nil],
   										 [nil,nil,nil,nil]]],
   									   [[[nil,nil,nil,nil], 
-									 	 [nil,nil,nil,nil], 
-										 [nil,"N",nil,nil],
+									 	 [nil,nil,"B",nil], 
+										 [nil,nil,nil,nil],
   										 [nil,nil,nil,nil]]]]
 
 puts "winning board"
