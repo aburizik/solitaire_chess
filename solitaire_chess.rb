@@ -274,7 +274,7 @@ def play(board, path)
 	lmoves = start
 
 	if pieces.length == 1
-		play(board, path).push(path)
+		play(board, path).push(path)#oh, never mind.
 	elsif lmoves == []
 		return []
 	else
