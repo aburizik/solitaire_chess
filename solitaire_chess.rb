@@ -179,41 +179,27 @@ puts get_legal_moves([[nil,nil,"N",nil],
   												["B","R",nil,nil]]]
 
 
-# if I had a board class I might be able to keep a record of the pieces I have
-# so I wouldn't have to traverse :-(
-
-def get_next_square(l, row, column)
-	if column < l-1
-		return [row, column+1]
-	elsif row < l-1
-		return [row+1, 0]
-	else
-		return false
-	end
-end
-
-
 def get_next_piece(board, row, column)
 	l = board.length
-	next_square = get_next_square(l, row, column)
 
-	if next_square
-		row = next_square[0]
-		column = next_square[1]
-		if board[row][column] != nil
-			return next_square
-		else
-			get_next_piece(board, row, column)
-		end
+	if column < l-1
+		column += 1
+	elsif row < l-1
+		column = 0
+		row += 1
 	else
 		return false
 	end
+	
+	if board[row][column] != nil
+		return [row, column]
+	else
+		get_next_piece(board, row, column)
+	end
+
 end
 
 # this is much less elegant than the nested loop I initially had.
-# The reason I have to do this is I need it to find the next piece
-# AFTER the one I pass in, so I had to outsource the stepping to
-# its own function to make that first step.	ugh.
 
 puts "get_next_piece tests"
 
