@@ -1,9 +1,10 @@
 # Solitaire chess
 # Start with a board with at least one chess piece.
-# A piece can only move to take another piece.
-# The victory condition is when there is only one piece left.
+# A piece can only move to capture another piece.
+# The victory condition is met when there is only one piece left.
 # The goal is to return all possible solutions,
-# where a solution is an array of successive board states.
+# where a solution is a legal succession of board states,
+# ending with the victory condition.
 
 # Solution to the challenge puzzle:
 
@@ -126,6 +127,9 @@ def get_legal_moves(board, row, column)
 								end}
 	return moves
 end
+
+# N.B. Because legal? returns "dne" when moving off the board,
+# the while loop breaks when no legal moves are found.
 
 puts "get_legal_moves tests"
 
