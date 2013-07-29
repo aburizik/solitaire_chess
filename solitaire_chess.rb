@@ -197,17 +197,17 @@ def get_next_piece(board, row, column)
 	l = board.length
 	next_square = get_next_square(l, row, column)
 
-	while next_square
+	if next_square
 		row = next_square[0]
 		column = next_square[1]
 		if board[row][column] != nil
-			break
+			return next_square
 		else
-			next_square = get_next_square(l, row, column)
+			get_next_piece(board, row, column)
 		end
+	else
+		return false
 	end
-	
-	return next_square
 end
 
 # this is much less elegant than the nested loop I initially had.
